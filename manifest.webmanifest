@@ -1,6 +1,6 @@
 {
   "name": "花呗还款模拟",
-  "short_name": "花呗模拟",
+  "short_name": "花呗",
   "description": "模拟花呗还款流程的演示应用，非真实交易",
   "lang": "zh-CN",
   "start_url": "./",
