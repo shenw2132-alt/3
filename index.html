@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4aa6ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="花呗模拟">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>花呗还款模拟</title>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--text:#1a1f2b;--sub:#8a93a6;--line:#e6eaf2;--red:#ff3b5c;--blue:#1677ff;--green:#16b364;--out:#dde3ec;--glass:linear-gradient(180deg,#d9f3ff,#fff 75%);--pink:linear-gradient(135deg,#fde0f0,#fff3f8 55%,#fff);--hd:radial-gradient(circle at 100% 0,#f2a4ff 0,transparent 190px),linear-gradient(180deg,#4aa6ff 0,#8cdcff 150px,#d8f2ff 270px,#f3f6fb 430px);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--card:#1a1f29;--text:#eef1f6;--sub:#8c95a8;--line:#2a3140;--out:#05070a;--glass:linear-gradient(180deg,#1d3a52,#1a1f29 75%);--pink:linear-gradient(135deg,#3a2236,#1a1f29 70%);--hd:radial-gradient(circle at 100% 0,#6b3a85 0,transparent 190px),linear-gradient(180deg,#1d4f8c 0,#1b3a5c 200px,#0f1218 430px);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1218;--card:#1a1f29;--text:#eef1f6;--sub:#8c95a8;--line:#2a3140;--out:#05070a;--glass:linear-gradient(180deg,#1d3a52,#1a1f29 75%);--pink:linear-gradient(135deg,#3a2236,#1a1f29 70%);--hd:radial-gradient(circle at 100% 0,#6b3a85 0,transparent 190px),linear-gradient(180deg,#1d4f8c 0,#1b3a5c 200px,#0f1218 430px);color-scheme:dark}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;background:var(--out);color:var(--text);min-height:100%}
+.app{max-width:430px;min-height:100vh;margin:0 auto;background-color:var(--bg);background-image:var(--hd);background-repeat:no-repeat;overflow:hidden;padding-bottom:28px}
+@media(max-width:430px){body{background-color:var(--bg);background-image:var(--hd);background-repeat:no-repeat}.app{background:none}}
+.view{display:none}.view.on{display:block}
+.nav{display:flex;align-items:center;gap:14px;height:58px;padding:0 18px;font-size:22px}
+.nav .back{font-size:34px;line-height:1;cursor:pointer;padding-right:4px}.nav .sp{flex:1}
+.nav svg{width:27px;height:27px;cursor:pointer}
+.card{margin:12px;background:var(--card);border-radius:22px;padding:20px}
+.c1{background:var(--glass);padding:24px 22px 20px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lab{font-size:15px;color:var(--sub)}
+.big{font-size:42px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+.mrow{display:flex;align-items:center;gap:8px;margin-top:22px;font-size:17px}
+.tag{font-size:13px;color:var(--blue);border:1px solid #a9d1ff;border-radius:6px;padding:1px 6px;background:rgba(22,119,255,.08)}
+.bill{display:flex;align-items:center;gap:10px;margin-top:6px}
+.bill b{font-size:32px;color:#0f2a5c;cursor:pointer;font-variant-numeric:tabular-nums}
+[data-theme="dark"] .bill b{color:#cfe2ff}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .bill b{color:#cfe2ff}}
+.pill{flex:1;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:999px;padding:11px 16px;font-size:16px;cursor:pointer;background:var(--card)}
+.sub{margin-top:16px;color:var(--sub);font-size:15px;display:flex;gap:8px;cursor:pointer}
+.c2{background:var(--pink);position:relative;min-height:220px;overflow:hidden}
+.c2 h3{font-size:20px;display:flex;gap:10px;align-items:center}
+.v2{font-size:13px;background:#dfe6f7;color:#5a6fa8;border-radius:6px;padding:2px 8px;font-style:italic}
+.c2 hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.c2 p{font-size:15px;color:var(--sub)}.c2 p+p{margin-top:12px;font-size:18px;color:#3a4a8c;max-width:215px;line-height:1.5}
+.btn{display:block;width:100%;border:0;border-radius:999px;background:var(--red);color:#fff;font-size:18px;font-weight:600;padding:15px;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:not-allowed}.btn.sm{width:auto;padding:12px 34px;margin-top:20px;font-size:17px}
+.btn.ghost{background:transparent;color:var(--sub);border:1px solid var(--line);margin-top:10px}
+.mas{position:absolute;right:-6px;bottom:0;width:150px}
+.icons{display:flex;justify-content:space-around;font-size:15px;text-align:center;padding:16px 4px}
+.icons svg{width:38px;height:38px;display:block;margin:0 auto 8px}
+.c4{background:linear-gradient(180deg,#e6f4ff,var(--card));}
+.c4 .t{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:20px;font-weight:700}
+.c4 .t span{font-size:16px;font-weight:500;color:var(--sub)}.c4 .t span b{color:var(--blue);font-size:30px}
+.c4 .r{text-align:center;margin-top:30px;font-size:18px}.c4 .r div{font-size:44px;font-weight:700;color:var(--blue)}
+.foot{text-align:center;font-size:12px;color:var(--sub);margin:14px 12px 0;line-height:1.7}
+.hero{text-align:center;padding:10px 0 6px}.hero .n{font-size:44px;font-weight:700;margin:8px 0;font-variant-numeric:tabular-nums}
+.st{display:inline-block;font-size:14px;padding:4px 12px;border-radius:999px;background:rgba(22,119,255,.12);color:var(--blue)}
+.st.bad{background:rgba(255,59,92,.12);color:var(--red)}.st.ok{background:rgba(22,179,100,.14);color:var(--green)}
+.bar{height:8px;border-radius:8px;background:var(--line);overflow:hidden;margin:14px 0 6px}.bar i{display:block;height:100%;background:var(--blue);border-radius:8px}
+.li{display:flex;justify-content:space-between;padding:13px 0;border-top:1px solid var(--line);font-size:16px}.li small{display:block;color:var(--sub);font-size:12px;margin-top:3px}
+.h4{font-size:17px;font-weight:700;margin-bottom:4px}
+.amt{display:flex;align-items:center;font-size:44px;font-weight:700;border-bottom:1px solid var(--line);padding:6px 0;margin-top:10px}
+.amt input{flex:1;min-width:0;border:0;outline:0;background:none;font:inherit;color:var(--text);padding-left:8px}
+.chips{display:flex;gap:10px;margin-top:14px}.chip{padding:7px 16px;border:1px solid var(--line);border-radius:999px;font-size:14px;cursor:pointer}
+.err{color:var(--red);font-size:13px;min-height:18px;margin-top:8px}
+.m{display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid var(--line);cursor:pointer;font-size:16px}
+.m u{margin-left:auto;width:20px;height:20px;border-radius:50%;border:2px solid var(--line)}.m.on u{border:6px solid var(--blue)}
+.ok-ic{width:76px;height:76px;border-radius:50%;background:var(--green);color:#fff;font-size:44px;line-height:76px;margin:20px auto 10px;text-align:center}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:20}.mask.on{display:flex}
+.sheet{width:100%;max-width:430px;background:var(--card);border-radius:22px 22px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));max-height:92vh;overflow:auto}
+.sheet h4{text-align:center;font-size:18px;margin-bottom:6px}
+.dots{display:flex;justify-content:center;gap:10px;margin:18px 0}.dots i{width:42px;height:42px;border:1px solid var(--line);border-radius:8px;display:grid;place-items:center}.dots i.f::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--text)}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.kp button{border:0;background:var(--bg);color:var(--text);font-size:24px;padding:14px;border-radius:10px;cursor:pointer}
+.f{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.f input{width:150px;text-align:right;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg);color:var(--text);font:inherit}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;display:none;z-index:30}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section class="view on" id="v-home">
+  <div class="nav"><span class="back">‹</span><span>花呗</span><span class="sp"></span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 14v-2a8 8 0 0116 0v2"/><rect x="3" y="13" width="4" height="6" rx="2"/><rect x="17" y="13" width="4" height="6" rx="2"/><path d="M19 19c0 1.5-2 2-5 2"/></svg>
+    <svg id="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>
+  </div>
+  <div class="card c1">
+    <div class="g2"><div><div class="lab">我的额度(元)</div><div class="big" id="h-avail"></div></div><div><div class="lab">我的省钱(元)</div><div class="big" id="h-save"></div></div></div>
+    <div class="mrow"><span id="h-month"></span><span class="tag">🛡 还款无忧</span></div>
+    <div class="bill"><b id="h-due" data-go="bill"></b><div class="pill" data-go="bill">查看我的账单详情<span>›</span></div></div>
+    <div class="sub" data-go="bill"><span>总计账单</span><span>|</span><span id="h-day"></span><span>›</span></div>
+  </div>
+  <div class="card c2">
+    <h3>花呗亲密度 <span class="v2">V2</span><span style="margin-left:auto;font-size:15px;font-weight:400;color:var(--sub)">会员权益 ›</span></h3><hr>
+    <p>这1点亲密度，答一下就到手</p><p>💞点击逛逛，亲密度+1，试试手气。</p>
+    <button class="btn sm" onclick="toast('模拟演示：已收下')">开心收下</button>
+    <svg class="mas" viewBox="0 0 150 190"><rect x="30" y="100" width="110" height="90" rx="30" fill="#a9c4f2"/><circle cx="80" cy="64" r="54" fill="#fff"/><ellipse cx="62" cy="14" rx="22" ry="12" fill="#6ab2ff" transform="rotate(-25 62 14)"/><ellipse cx="102" cy="8" rx="14" ry="20" fill="#6ab2ff" transform="rotate(25 102 8)"/><circle cx="46" cy="78" r="11" fill="#ffb3c1" opacity=".7"/><circle cx="116" cy="78" r="11" fill="#ffb3c1" opacity=".7"/><path d="M60 58q6-8 12 0M90 58q6-8 12 0" stroke="#222" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M70 74q14 18 30 0z" fill="#ff4a4a"/></svg>
+  </div>
+  <div class="card icons">
+    <div><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#1b8cff"/><circle cx="12" cy="14" r="1.8" fill="#fff"/><circle cx="20" cy="14" r="1.8" fill="#fff"/><path d="M11 19q5 4 10 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>亲密度</div>
+    <div><svg viewBox="0 0 32 32"><rect x="6" y="3" width="20" height="26" rx="3" fill="#2b7bff"/><path d="M16 9l2 4.5 5 .5-3.7 3.3 1 4.9L16 19.5 11.7 22l1-4.9L9 13.8l5-.5z" fill="#fff"/></svg>生活号</div>
+    <div><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#ffb800"/><circle cx="16" cy="16" r="6.5" fill="none" stroke="#fff" stroke-width="3"/></svg>花呗金</div>
+    <div><svg viewBox="0 0 32 32"><path d="M16 3c6 4 12 9 12 16a12 12 0 01-24 0c0-7 6-12 12-16z" fill="#1b7bff"/><path d="M16 23l-5-5a3 3 0 015-3 3 3 0 015 3z" fill="#fff"/></svg>花呗社区</div>
+    <div><svg viewBox="0 0 32 32" fill="#1b7bff"><circle cx="9" cy="9" r="5"/><circle cx="23" cy="9" r="5"/><circle cx="9" cy="23" r="5"/><circle cx="23" cy="23" r="5"/></svg>全部</div>
+  </div>
+  <div class="card c4"><div class="lab">我要提额</div>
+    <div class="t">完成所有任务可提额<span><b>10</b>月 &nbsp;|&nbsp; 11月 &nbsp;|&nbsp; 12月</span></div>
+    <div class="r">恭喜！10月额度提升(元)<div>50.00</div></div></div>
+  <p class="foot">模拟演示，非真实交易　·　点击右上角设置图标可自定义额度、金额与日期</p>
+</section>
+
+<section class="view" id="v-bill">
+  <div class="nav"><span class="back" data-go="home">‹</span><span>账单详情</span></div>
+  <div class="card"><div class="hero"><div class="lab">本期待还(元)</div><div class="n" id="b-due"></div><span class="st" id="b-st"></span></div>
+    <div class="bar"><i id="b-bar"></i></div>
+    <div class="row lab" style="display:flex;justify-content:space-between"><span id="b-used"></span><span id="b-total"></span></div>
+    <div class="li" style="margin-top:14px"><span>最后还款日</span><span id="b-date"></span></div>
+    <div class="li"><span>本期账单总额</span><span id="b-bill"></span></div>
+    <div class="li"><span>已还金额</span><span id="b-paid"></span></div>
+    <button class="btn" style="margin-top:14px" id="b-go" data-go="repay">立即还款</button></div>
+  <div class="card"><div class="h4">消费明细</div><div id="b-items"></div></div>
+  <div class="card"><div class="h4">还款记录</div><div id="b-hist"></div></div>
+</section>
+
+<section class="view" id="v-repay">
+  <div class="nav"><span class="back" data-go="bill">‹</span><span>还款</span></div>
+  <div class="card"><div class="lab">还款金额(元)，本期待还 <span id="r-due"></span></div>
+    <div class="amt">¥<input id="r-in" inputmode="decimal" autocomplete="off"></div>
+    <div class="chips"><span class="chip" id="c-all">全部还清</span><span class="chip" id="c-half">还一半</span></div>
+    <div class="err" id="r-err"></div></div>
+  <div class="card"><div class="h4">付款方式</div><div id="r-m"></div></div>
+  <div style="margin:12px"><button class="btn" id="r-ok">确认还款</button></div>
+</section>
+
+<section class="view" id="v-ok">
+  <div class="nav"><span class="sp"></span><span>还款结果</span><span class="sp"></span></div>
+  <div class="card" style="text-align:center"><div class="ok-ic">✓</div><div style="font-size:20px;font-weight:700">还款成功</div><div class="big" id="s-amt"></div>
+    <div style="text-align:left;margin-top:20px">
+    <div class="f"><span class="lab">还款时间</span><span id="s-time"></span></div>
+    <div class="f"><span class="lab">付款方式</span><span id="s-m"></span></div>
+    <div class="f"><span class="lab">剩余待还</span><span id="s-left"></span></div>
+    <div class="f"><span class="lab">当前可用额度</span><span id="s-avail"></span></div></div>
+    <button class="btn" style="margin-top:20px" data-go="home">完成</button>
+    <button class="btn ghost" data-go="bill">查看账单</button></div>
+  <p class="foot">模拟演示，非真实交易</p>
+</section>
+</div>
+
+<div class="mask" id="pay"><div class="sheet"><h4>请输入支付密码</h4><div class="lab" style="text-align:center">还款 <b id="p-amt" style="color:var(--text)"></b>　演示环境，任意6位数字均可通过</div>
+  <div class="dots" id="dots"></div><div class="kp" id="kp"></div><button class="btn ghost" id="p-x">取消</button></div></div>
+
+<div class="mask" id="set"><div class="sheet"><h4>模拟参数设置</h4>
+  <div class="f"><span>总额度(元)</span><input id="st-total" type="number" step="0.01" min="0"></div>
+  <div class="f"><span>可用额度(元)</span><input id="st-avail" type="number" step="0.01" min="0"></div>
+  <div class="f"><span>本期待还金额(元)</span><input id="st-due" type="number" step="0.01" min="0"></div>
+  <div class="f"><span>我的省钱(元)</span><input id="st-save" type="number" step="0.01" min="0"></div>
+  <div class="f"><span>最后还款日</span><input id="st-date" type="date"></div>
+  <div class="f"><span>模拟今天(留空为真实日期)</span><input id="st-today" type="date"></div>
+  <button class="btn" style="margin-top:16px" id="st-ok">保存设置</button>
+  <button class="btn ghost" id="st-reset">恢复默认数据</button><button class="btn ghost" id="st-x">关闭</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY="huabei_sim_v1",$=i=>document.getElementById(i),r2=n=>Math.round(n*100)/100;
+const D={total:1000,avail:0,bill:883.04,due:883.04,save:0.95,date:"2026-11-08",today:"",h:[]};
+let s={...D,h:[]};
+try{const x=JSON.parse(localStorage.getItem(KEY));if(x)s={...D,...x}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}};
+const f=n=>Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const P=d=>new Date(d+"T00:00:00");
+const now=()=>{if(s.today)return P(s.today);const t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate())};
+const days=()=>Math.round((P(s.date)-now())/864e5);
+const METHODS=["余额宝","账户余额","储蓄卡(尾号6688)"];let mi=0,pin="";
+function toast(t){const e=$("toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",1800)}
+function status(){const d=days();if(s.due<=0)return["本期已还清","ok"];if(d<0)return["已逾期 "+(-d)+" 天","bad"];if(d===0)return["今天是最后还款日","bad"];return["距最后还款日还有 "+d+" 天",""]}
+function render(){
+  const D8=P(s.date),paid=r2(s.bill-s.due);
+  $("h-avail").textContent=f(s.avail);$("h-save").textContent=f(s.save);
+  $("h-month").textContent=(D8.getMonth()+1)+"月累计";$("h-due").textContent=f(s.due);
+  $("h-day").textContent="还款日每月"+D8.getDate()+"日";
+  const[st,c]=status();$("b-due").textContent=f(s.due);$("b-st").textContent=st;$("b-st").className="st "+c;
+  $("b-bar").style.width=Math.min(100,s.total?(s.total-s.avail)/s.total*100:0)+"%";
+  $("b-used").textContent="已用额度 "+f(Math.max(0,s.total-s.avail));$("b-total").textContent="总额度 "+f(s.total);
+  $("b-date").textContent=D8.getFullYear()+"年"+(D8.getMonth()+1)+"月"+D8.getDate()+"日";
+  $("b-bill").textContent="¥"+f(s.bill);$("b-paid").textContent="¥"+f(paid);
+  $("b-go").style.display=s.due>0?"block":"none";
+  const a=r2(s.bill*.46),b=r2(s.bill*.31),it=[["淘宝购物","订单自动扣款",a],["餐饮外卖","美团外卖",b],["出行打车","高德打车",r2(s.bill-a-b)]];
+  $("b-items").innerHTML=it.map(x=>`<div class="li"><span>${x[0]}<small>${x[1]}</small></span><span>${f(x[2])}</span></div>`).join("");
+  $("b-hist").innerHTML=s.h.length?s.h.slice(0,6).map(x=>`<div class="li"><span>还款<small>${x.t}　${x.m}</small></span><span style="color:var(--green)">-${f(x.a)}</span></div>`).join(""):'<div class="lab" style="padding:10px 0">暂无还款记录</div>'
+}
+function go(v){document.querySelectorAll(".view").forEach(e=>e.classList.toggle("on",e.id==="v-"+v));if(v==="repay")initRepay();render();scrollTo(0,0)}
+function initRepay(){$("r-in").value=s.due.toFixed(2);$("r-due").textContent="¥"+f(s.due);
+  $("r-m").innerHTML=METHODS.map((m,i)=>`<div class="m ${i===mi?"on":""}" data-m="${i}">${["💰","👛","💳"][i]} ${m}<u></u></div>`).join("");chk()}
+function val(){const v=parseFloat($("r-in").value);return isNaN(v)?0:r2(v)}
+function chk(){const v=val();let e="";if(!$("r-in").value)e="";else if(v<0.01)e="还款金额不能小于 0.01 元";else if(v>s.due+1e-9)e="还款金额不能超过待还金额 ¥"+f(s.due);
+  $("r-err").textContent=e;$("r-ok").disabled=!(v>=0.01&&!e);$("r-ok").textContent=v>=0.01&&!e?"确认还款 ¥"+f(v):"确认还款"}
+function drawDots(){$("dots").innerHTML=[0,1,2,3,4,5].map(i=>`<i class="${i<pin.length?"f":""}"></i>`).join("")}
+function openPay(){pin="";drawDots();$("p-amt").textContent="¥"+f(val());$("pay").classList.add("on")}
+function key(k){if(k==="⌫")pin=pin.slice(0,-1);else if(pin.length<6&&k!=="")pin+=k;drawDots();if(pin.length===6)setTimeout(finish,350)}
+function finish(){const a=val();$("pay").classList.remove("on");
+  s.due=Math.max(0,r2(s.due-a));s.avail=Math.min(s.total,r2(s.avail+a));
+  const t=new Date().toLocaleString("zh-CN",{hour12:false});s.h.unshift({a,m:METHODS[mi],t});save();
+  $("s-amt").textContent="¥"+f(a);$("s-time").textContent=t;$("s-m").textContent=METHODS[mi];$("s-left").textContent="¥"+f(s.due);$("s-avail").textContent="¥"+f(s.avail);go("ok")}
+$("kp").innerHTML=["1","2","3","4","5","6","7","8","9","","0","⌫"].map(k=>`<button data-k="${k}">${k}</button>`).join("");
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]");if(g)return go(g.dataset.go);
+  const m=e.target.closest("[data-m]");if(m){mi=+m.dataset.m;initRepay()}
+  const k=e.target.closest("[data-k]");if(k)key(k.dataset.k)});
+$("r-in").addEventListener("input",chk);
+$("c-all").onclick=()=>{$("r-in").value=s.due.toFixed(2);chk()};
+$("c-half").onclick=()=>{$("r-in").value=(Math.max(0.01,Math.floor(s.due*50)/100)).toFixed(2);chk()};
+$("r-ok").onclick=openPay;$("p-x").onclick=()=>$("pay").classList.remove("on");
+$("gear").onclick=()=>{const m={total:s.total,avail:s.avail,due:s.due,save:s.save,date:s.date,today:s.today};
+  for(const k in m)$("st-"+k).value=m[k];$("set").classList.add("on")};
+$("st-x").onclick=()=>$("set").classList.remove("on");
+$("st-ok").onclick=()=>{const n=k=>parseFloat($("st-"+k).value),T=n("total"),A=n("avail"),U=n("due"),S=n("save"),dt=$("st-date").value;
+  if([T,A,U,S].some(x=>isNaN(x)||x<0))return toast("请填写不小于 0 的金额");
+  if(A>T)return toast("可用额度不能大于总额度");if(!dt)return toast("请选择最后还款日");
+  s.total=r2(T);s.avail=r2(A);s.save=r2(S);s.date=dt;s.today=$("st-today").value;
+  if(r2(U)!==s.due){s.due=r2(U);s.bill=Math.max(s.bill,s.due)}
+  save();render();$("set").classList.remove("on");toast("已保存")};
+$("st-reset").onclick=()=>{s={...D,h:[]};save();render();$("set").classList.remove("on");toast("已恢复默认")};
+if("serviceWorker"in navigator&&/^https?:/.test(location.protocol)){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
+render();
+</script>
+</body>
+</html>
